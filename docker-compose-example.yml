@@ -1,0 +1,40 @@
+version: "3"
+services:
+  # Palworld Server Configuration
+  palworld:
+    image: thijsvanloef/palworld-server-docker:latest # Docker image for Palworld server
+    restart: unless-stopped # Ensures the container restarts if it stops unexpectedly
+    container_name: palworld-server # Name of the container
+    ports:
+      - 8211:8211/udp # Game server port
+      - 27015:27015/udp # Steam query port
+      - 127.0.0.1:25575:25575 # RCON port, bound to localhost for security
+    environment:
+      - PUID=1000 # User ID for the container
+      - PGID=1000 # Group ID for the container
+      - PORT=8211 # Game server port
+      - PLAYERS=16 # Maximum number of players
+      - SERVER_PASSWORD="your_server_password" # Optional but recommended server password
+      - MULTITHREADING=true # Enable multithreading for performance
+      - RCON_ENABLED=true # Enable RCON
+      - RCON_PORT=25575 # RCON port
+      - TZ=UTC # Timezone setting for the server
+      - ADMIN_PASSWORD="your_admin_password" # Admin password for server management
+      - COMMUNITY=true # Set to true to list server in the community tab
+      - SERVER_NAME="Your_Server_Name" # Name of your server
+      - SERVER_DESCRIPTION="" # Description of your server
+    volumes:
+      - ./palworld:/palworld/ # Mounts the server data directory
+
+  # MPO Server Configuration
+  mposerver:
+    image: "omagodev/mposerver:latest" # Docker image for MPO server
+    environment:
+      PALWORLD_SERVER_IP_ADDRESS: "palworld" # IP address of the Palworld server
+      PALWORLD_RCON_PORT: "25575" # RCON port of the Palworld server
+      PALWORLD_RCON_PASSWORD: "your_admin_password" # RCON password for the Palworld server
+      INFO_CACHE_DURATION_MS: 5000 # Duration for caching server info in milliseconds
+      BEARER_TOKEN: "your_bearer_token" # Bearer token for authentication
+      PORT: 3000 # Port for the MPO server
+    ports:
+      - "3000:3000" # Port mapping for the MPO server
