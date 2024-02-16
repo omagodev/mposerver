@@ -26,15 +26,3 @@ services:
     volumes:
       - ./palworld:/palworld/ # Mounts the server data directory
 
-  # MPO Server Configuration
-  mposerver:
-    image: "omagodev/mposerver:latest" # Docker image for MPO server
-    environment:
-      PALWORLD_SERVER_IP_ADDRESS: "palworld" # IP address of the Palworld server
-      PALWORLD_RCON_PORT: "25575" # RCON port of the Palworld server
-      PALWORLD_RCON_PASSWORD: "your_admin_password" # RCON password for the Palworld server
-      INFO_CACHE_DURATION_MS: 5000 # Duration for caching server info in milliseconds
-      BEARER_TOKEN: "your_bearer_token" # Bearer token for authentication
-      PORT: 3000 # Port for the MPO server
-    ports:
-      - "3000:3000" # Port mapping for the MPO server
